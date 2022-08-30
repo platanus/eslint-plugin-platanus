@@ -22,9 +22,9 @@ Add `platanus` to the plugins section of your `.eslintrc` configuration file. Yo
 
 ```json
 {
-    "plugins": [
-        "platanus"
-    ]
+  "plugins": [
+    "platanus"
+  ]
 }
 ```
 
@@ -33,9 +33,9 @@ Then configure the rules you want to use under the rules section.
 
 ```json
 {
-    "rules": {
-        "platanus/rule-name": 2
-    }
+  "rules": {
+    "platanus/rule-name": 2
+  }
 }
 ```
 
