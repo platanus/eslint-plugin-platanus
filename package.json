@@ -7,7 +7,13 @@
     "eslintplugin",
     "eslint-plugin"
   ],
-  "author": "Platanus",
+  "author": {
+    "name": "Platanus",
+    "url": "https://platan.us/"
+  },
+  "contributors": [
+    { "name": "Diego Fernández" }
+  ],
   "main": "./lib/index.js",
   "exports": "./lib/index.js",
   "scripts": {
