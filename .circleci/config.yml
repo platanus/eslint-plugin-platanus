@@ -1,0 +1,63 @@
+version: 2.1
+
+commands:
+  setup:
+    description: checkout code, restore cache, install dependencies, save cache
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - yarn-dependencies-{{ .Environment.YARN_CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+            - yarn-dependencies-
+
+      - run:
+          name: Install reviewdog
+          command: |
+            curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b ./bin
+      - run:
+          name: Install yarn dependencies
+          command: |
+            sudo apt update && sudo apt install yarn
+            yarn install --frozen-lockfile
+
+      - save_cache:
+          key: yarn-dependencies-{{ .Environment.YARN_CACHE_VERSION }}-{{ checksum "yarn.lock" }}
+          paths:
+            - node_modules
+
+jobs:
+  test:
+    docker:
+      - image: node:14
+    steps:
+      - setup
+      - run:
+          name: Run jest
+          command: yarn run test
+      - store_test_results:
+          path: test_results
+
+  lint:
+    docker:
+      - image: node:14
+    steps:
+      - setup
+      - run:
+          name: Get files to lint
+          command: |
+            mkdir tmp
+            git diff origin/main --name-only --diff-filter=d > tmp/files_to_lint
+      - run:
+          name: Run eslint
+          shell: /bin/bash
+          command: |
+            cat tmp/files_to_lint | grep -E '.+\.(js|jsx|vue)$' | xargs yarn run eslint \
+            | ./bin/reviewdog -reporter=github-pr-review -f=eslint
+workflows:
+  test_and_lint:
+    jobs:
+      - test:
+          context: org-global
+      - lint:
+          context: org-global
