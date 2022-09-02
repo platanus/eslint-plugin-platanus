@@ -18,29 +18,20 @@ yarn add eslint-plugin-platanus --dev
 
 ## Usage
 
-Add `platanus` to the plugins section of your `.eslintrc` configuration file. You can omit the `eslint-plugin-` prefix:
+Extend the `plugin:platanus/recommended` in your `.eslintrc.json`:
 
 ```json
 {
-  "plugins": [
-    "platanus"
+  "extends": [
+    "plugin:platanus/recommended"
   ]
 }
 ```
 
-
-Then configure the rules you want to use under the rules section.
-
-```json
-{
-  "rules": {
-    "platanus/rule-name": 2
-  }
-}
-```
+This will add this plugin and configure all rules according to [recommended.js](./lib/configs/recommended.js) config.
 
 ## Supported Rules
 
-* Fill in provided rules here
+- [no-click-in-non-interactive-elements](./docs/rules/no-click-in-non-interactive-elements.md)
 
 
